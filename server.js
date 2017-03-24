@@ -3,7 +3,7 @@ const path  = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
-const port =  process.env.PORT;
+const port =  process.env.PORT || 8080;
 const hbs = require("express-handlebars");
 const mongoose = require("mongoose");
 
