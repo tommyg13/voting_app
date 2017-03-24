@@ -3,7 +3,6 @@ const path  = require("path");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const logger = require("morgan");
-const port =  process.env.PORT || 8080;
 const hbs = require("express-handlebars");
 const mongoose = require("mongoose");
 
@@ -60,9 +59,5 @@ app.use(function(err, req, res, next) {
   });
 });
 
-// listen to port
-app.listen(port,()=>{
-console.log("server listening on " + port);
-});
 
 module.exports = app;
