@@ -1,0 +1,24 @@
+body {
+    background-color: #2b3e50;
+    color:white;
+}
+
+#myNavbar, .navbar-inverse  {
+    font-size: 15px;
+    
+    background-color: #bf5a16 !important;
+    background-image: linear-gradient(to bottom,#bf5a16 0,#bf5a16 100%);
+}
+
+a {
+    text-decoration: none !important;
+
+}
+
+.navbar a{
+color:white !important;    
+}
+
+a:hover {
+  opacity:0.3;
+}

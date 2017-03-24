@@ -1,0 +1,51 @@
+#form {
+  margin-top:55px !important;
+  margin-bottom:55px !important;
+   background: -moz-linear-gradient(45deg, rgba(15,60,120,1) 0%, rgba(255,255,0,1) 100%);
+background: -webkit-linear-gradient(45deg, rgba(15,60,120,1) 0%, rgba(255,255,0,1) 100%);
+background: -o-linear-gradient(45deg, rgba(15,60,120,1) 0%, rgba(255,255,0,1) 100%);
+background: -ms-linear-gradient(45deg, rgba(15,60,120,1) 0%, rgba(255,255,0,1) 100%);
+background: linear-gradient(45deg, rgba(15,60,120,1) 0%, rgba(255,255,0,1) 100%); 
+  width:250px;
+  margin:0 auto;
+}
+
+input[type='text'] {
+    background-image: url(http://www.worldacademysport.com/environments/generic/images/user.png);
+    background-position: 7px 7px;
+    background-repeat: no-repeat;
+}
+
+input[type='email'] {
+    background-image: url(http://www.metrolinktrains.com/images/icon_share_email.png);
+    background-position: 7px 7px;
+    background-repeat: no-repeat;
+}
+
+input[type='password'] {
+    background-image: url(https://s3.amazonaws.com/assets.newsok/images/20x20_lock.png);
+    background-position: 7px 7px;
+    background-repeat: no-repeat;
+  
+}
+
+label {
+  padding-top:5px;
+  }
+
+#form button{
+  margin-bottom:5px;
+}
+
+button:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 27px 50px 0 rgba(0,0,0,0.19);
+}
+
+#form h3{
+    text-shadow:5px 5px 10px black;
+}
+
+input {
+  width:200px !important;
+  padding-left: 35px !important;
+}
