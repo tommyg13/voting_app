@@ -12,6 +12,8 @@
 <!-- Latest compiled JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 <link rel="stylesheet" href="/stylesheets/style.css" type="text/css" />
 </head>
 
@@ -29,8 +31,14 @@
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav navbar-right">
         <li><a href="/">Home</a></li>
+        {{# if user}} 
+        <li><a href="/profile"><span></span> My polls</a></li>
+        <li><a href="/new_poll"><span></span> New poll</a></li>
+         <li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+        {{else}}
         <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
         <li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+         {{/if}}
       </ul>
     </div>
   </div>

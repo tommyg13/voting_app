@@ -22,3 +22,7 @@ color:white !important;
 a:hover {
   opacity:0.3;
 }
+
+.alert {
+    width:480px !important;
+}

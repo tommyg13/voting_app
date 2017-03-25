@@ -1,16 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-/* Get home page */
-router.get("/",(req,res)=>{
-   res.render("index",{user: req.user});
-});
-
-/**
- * Ensure a user is logged in before allowing them to continue their request.
- *
- * If a user isn't logged in, they'll be redirected back to the login page.
- */
 function requireLogin (req, res, next) {
   if (req.session.user===undefined) {
     
@@ -21,12 +11,8 @@ function requireLogin (req, res, next) {
     next();
   }
 };
-
-/*Render the profile page. */
-router.get('/profile', requireLogin, function(req, res) {
-  res.render('Profile');
+router.get("/new_poll",requireLogin,(req,res)=>{
+   res.render("poll"); 
 });
-
-
 
 module.exports = router;
