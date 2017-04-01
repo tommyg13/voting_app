@@ -136,8 +136,4 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.listen(process.env.PORT || 8080,(err)=>{
-  if (err) console.log(err);
-  else console.log("running");
-});
 module.exports = app;
