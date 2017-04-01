@@ -5,7 +5,6 @@ body {
 
 #myNavbar, .navbar-inverse  {
     font-size: 15px;
-    
     background-color: #bf5a16 !important;
     background-image: linear-gradient(to bottom,#bf5a16 0,#bf5a16 100%);
 }
@@ -16,7 +15,7 @@ a {
 }
 
 .navbar a{
-color:white !important;    
+    color:white !important;    
 }
 
 a:hover {
@@ -25,4 +24,8 @@ a:hover {
 
 .alert {
     width:480px !important;
+}
+
+.jumbotron a {
+    font-size: 20px;
 }

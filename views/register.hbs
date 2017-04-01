@@ -18,11 +18,24 @@
         <div class="alert alert-danger">{{msg}} </div>
       {{/each}}
 {{/if}}
+{{# if success}}
+  <div class="alert alert-success">
+    <p> {{success}}</p>
+    </div>
+{{/if}} 
+
+{{# if success_msg}}
+  <div class="alert alert-success">
+    <p> {{success_msg}}</p>
+    </div>
+{{/if}} 
 </div>
 
 <div id="form" align="center">
   <h3>Signup</h3>
-<form method="post" >
+<form method="post">
+    <input type="hidden", name="_csrf", value="{{csrfToken}}">
+    
    <div class="form-group">
     <label for="username">Username:</label>
  <input  type="text" class="form-control" id="username" name="username" >

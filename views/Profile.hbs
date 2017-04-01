@@ -1,7 +1,15 @@
 <title>Profile</title>
+<link rel="stylesheet" href="/stylesheets/profile.css" type="text/css" />
 
- <h2 align="center" >Select a poll to see the results and vote, or <a href="/new_poll">or make a new poll!</a></h2>
+ <h2 align="center" >Select a poll to see the results and vote,or make a <a href="/new_poll">new</a> poll!</h2>
  
- <div class="jumbotron">
+ <div class="jumbotron container">
+  <h2 style="color:black" align="center">My polls</h2>
+  {{# each title}}
+   <a href="/show/{{_id}}" class="list-group-item">
+    {{title}}
      
+      </a>
+    {{/each}}
  </div>
+ 

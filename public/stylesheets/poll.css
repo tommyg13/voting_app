@@ -5,3 +5,11 @@ body {
 label {
     float: left !important;
 }
+
+button {
+    margin:5px;
+}
+
+textarea {
+    padding: 0 !important;
+}

@@ -8,6 +8,7 @@ module.exports.User = mongoose.model('User', new Schema({
   username:    { type: String, required: '{PATH} is required.' },
   email:        { type: String, required: '{PATH} is required.', unique: true },
   password:     { type: String, required: '{PATH} is required.' },
+  isAuth:       {type:Boolean, default:false},
   resetPasswordToken: String,
   resetPasswordExpires: Date
 }));

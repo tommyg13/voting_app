@@ -3,11 +3,15 @@
 
 
 <div class="jumbotron container" align="center">
-    <h1>Make new poll</h1>
-    <form>
+    <h1>Make a new poll</h1>
+    <form method="post">
+        <input type="hidden", name="_csrf", value="{{csrfToken}}">  
         <label>Title:</label> <br>
-        <input class="form-control">
+        <input name="title" class="form-control">
         <label>Options:</label> <br>
-        <textarea class="form-control"> </textarea>
+        <textarea name="options" class="form-control"> </textarea>
+                <label>Options:</label> <br>
+        <textarea name="options" class="form-control"> </textarea>
+        <button class="btn btn-danger">Create</button>
     </form>
 </div>

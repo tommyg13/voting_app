@@ -9,12 +9,12 @@ const session = require("client-sessions");
 const expressValidator = require("express-validator");
 const flash = require('connect-flash');
 const middleware = require('./middleware');
+const csrf = require('csurf');
 const mongoose = require("mongoose");
 
 const app = express();
 require("dotenv").config();
 const url=process.env.MONGOLAB_URI;
-
 
 // connect to db
 mongoose.connect(url,(err)=>{
@@ -46,7 +46,7 @@ app.use(favicon(path.join(__dirname, 'public', "images",'favicon.ico')));
 app.use(logger('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
     cookieName: 'session',
     secret: 'keyboard cat',
@@ -56,6 +56,15 @@ app.use(session({
     duration: 30 * 60 * 1000,
     activeDuration: 5 * 60 * 1000,
   }));
+  
+/* config csurf */
+app.use(csrf({cookie: true}));
+app.use(function (req, res, next){
+    res.locals._csrf = req.csrfToken();
+    next();
+}); 
+
+/* config expressValidator */
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
       var namespace = param.split('.')
@@ -94,13 +103,12 @@ app.use(function(req, res, next) {
 
 app.use(middleware.simpleAuth);
   
-
 // routes
 app.use(require('./routes/index'));
 app.use(require("./routes/users"));
 app.use(require("./routes/polls"));
 
-
+  
 // catch 400 and handle error
 app.use((req,res,next)=>{
 	const err = new Error("Not Found");
@@ -128,4 +136,8 @@ app.use(function(err, req, res, next) {
   });
 });
 
+app.listen(process.env.PORT || 8080,(err)=>{
+  if (err) console.log(err);
+  else console.log("running");
+});
 module.exports = app;

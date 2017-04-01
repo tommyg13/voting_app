@@ -1,0 +1,48 @@
+body {
+    color:black;
+    overflow: hidden;
+}
+
+select {
+    margin-bottom: 20px !important;
+}
+
+.btn-xs, .btn-success, .btn-danger {
+    margin-top: 5px;
+}
+
+#confirm {
+    display: none;
+    margin-left: 26px;
+}
+
+#add {
+    margin-left: 26px;
+}
+
+#data {
+    padding-left: 10px;
+}
+
+.form-control {
+    width: 50%;
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table {
+    width: 100%;
+}
+
+.fb-share-button {
+  padding-top: 5px;  
+}
+
+@media screen and (max-width: 730px) {
+    .col-sm-6 {
+        padding-top:10px;
+    }
+}

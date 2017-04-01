@@ -1,0 +1,17 @@
+body {
+    color:black;
+}
+
+.jumbotron {
+    padding-top: 0px;
+    margin-top: 65px;
+}
+
+h2 {
+   padding-bottom: 15px;
+   color:white;
+}
+
+.jumbotron a {
+    font-size: 20px;
+}

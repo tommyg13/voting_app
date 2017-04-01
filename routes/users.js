@@ -9,10 +9,11 @@ const async = require('async');
 const crypto = require('crypto');
 const router = express.Router();
 
-
+require("dotenv").config();
+const pass=process.env.PASS;
 /* Get register page */
 router.get("/register",(req,res)=>{
-   res.render("register"); 
+   res.render("register",{csrfToken: req.csrfToken()}); 
 });
 
 /* Crete new user account */
@@ -40,18 +41,17 @@ req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
         error = 'That email is already taken, please try another.';
       }
         
-      res.render('register',{errors:errors, error:error});
+      res.render('register',{errors:errors, error:error,csrfToken: req.csrfToken()});
     }else if(req.body.password !== req.body.password2){
         error="Passwords do not match";
     req.session.destroy();
     req.session.reset();
-      res.render('register', { errors: errors, error:error });
+      res.render('register', { errors: errors, error:error,csrfToken: req.csrfToken() });
     } 
     else {
       server.createUserSession(req, res, user);
-
-     req.flash('success_msg', 'You are registered and can now login');
-      res.redirect('login');
+    let success="You are successfully registered and loged in";
+    res.render('register',{ success,csrfToken: req.csrfToken() });
     }
   });
 });
@@ -59,7 +59,7 @@ req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
 /* Get login page */
 router.get("/login",(req,res)=>{
-   res.render("login");
+   res.render("login",{csrfToken: req.csrfToken()});
 });
 
 /**
@@ -69,14 +69,14 @@ router.get("/login",(req,res)=>{
 router.post("/login",(req,res)=>{
    models.User.findOne({email: req.body.email}, "username email password",(err,user)=>{
       if(!user){
-          res.render("login",{"error":"Unknown User"});
+          res.render("login",{"error":"Unknown User",csrfToken: req.csrfToken()});
       }else {
       if (bcrypt.compareSync(req.body.password, user.password)) {
         server.createUserSession(req, res, user);
         res.redirect('/');
+        
       }else {
-         console.log(user)
-        res.render('login', { "error": "Incorrect email / password."});
+        res.render('login', { "error": "Incorrect email / password.",csrfToken: req.csrfToken()});
       }
       }
    });
@@ -84,7 +84,7 @@ router.post("/login",(req,res)=>{
 
 /* Get forgot password page */
 router.get("/forgot",(req,res)=>{
-   res.render("forgot");
+   res.render("forgot",{csrfToken: req.csrfToken()});
 });
 
 /* Handle forgot password */
@@ -115,7 +115,7 @@ async.waterfall([
      var options = {
     auth: {
         api_user: 'tommyg13',
-        api_key: 'Paogate13'
+        api_key: pass
     }
 }
 let mailer = nodemailer.createTransport(sgTransport(options));
@@ -149,7 +149,7 @@ router.get('/reset/:token', function(req, res) {
       req.flash('error', 'Password reset token is invalid or has expired.');
       return res.redirect('/forgot');
     }
-    res.render('reset');
+    res.render('reset',{csrfToken: req.csrfToken()});
   });
 });
 
@@ -190,7 +190,7 @@ router.post('/reset/:token', function(req, res) {
      var options = {
     auth: {
         api_user: 'tommyg13',
-        api_key: 'Paogate13'
+        api_key: pass
     }
 } 
       let email = {
@@ -217,6 +217,7 @@ router.post('/reset/:token', function(req, res) {
  * Log a user out of their account, then redirect them to the login page.
  */
 router.get('/logout', function(req, res) {
+  
   if (req.session) {
     req.session.destroy();
     req.session.reset();
