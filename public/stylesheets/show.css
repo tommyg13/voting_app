@@ -45,4 +45,14 @@ table {
     .col-sm-6 {
         padding-top:10px;
     }
+    #confirm {
+    display: none;
+    margin-left: 0px;
+}
+
+    #add {
+    margin-left: 0px;
+    margin-bottom:6px;
+}
+
 }

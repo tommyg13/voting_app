@@ -26,16 +26,17 @@
 <button id="confirm"class="btn btn-xs btn-info" type="button" onclick="submitOption();"name="handle" value="confirm" >confirm</button>
 </form>
 {{#if auth}}
+
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/el_GR/sdk.js#xfbml=1&version=v2.8&appId=1327370760690345";
+  js.src = "//connect.facebook.net/el_GR/sdk.js#xfbml=1&version=v2.8";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 
-<div class="fb-share-button" data-href="https://dapp-gkazikas.c9users.io/show/{{id}}" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdapp-gkazikas.c9users.io%2Fshow%2F58df9f1b71ac1f09b586050a&amp;src=sdkpreparse">Κοινοποιήστε</a></div>
+<div class="fb-share-button" data-href="https://tgvoting-app.herokuapp.com/show/{{id}}" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftgvoting-app.herokuapp.com%{{id}}&amp;src=sdkpreparse">Share</a></div>
 {{/if}}
 </div>
 
