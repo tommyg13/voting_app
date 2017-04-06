@@ -24,7 +24,7 @@ router.get("/new_poll",requireLogin,(req,res)=>{
 router.post("/new_poll",(req,res)=>{
 let username = req.user.username;
 let option=req.body.options;
-
+let title= req.body.title;
       let choices = function(option) {
         this.option = option;
         this.votes = 0;
@@ -35,15 +35,10 @@ let option=req.body.options;
         choices1.push(x);
   });
 
-       let data = new poll({
-            title:  req.body.title,
-            options:choices1,
-            author: username
-  });
   
 	req.checkBody('title', 'Your poll needs a title').notEmpty();
 
- poll.createPoll(data, function(err, poll) {
+
      let errors = req.validationErrors();
      let error = "";
      	option.forEach(opt=>{
@@ -52,15 +47,23 @@ let option=req.body.options;
         }	    
 	});
      
-     if(err) console.log(err);
      if(errors){
-        res.render("poll",{errors,error,csrfToken: req.csrfToken()}); 
+        res.render("poll",{errors,error,option,title,csrfToken: req.csrfToken()}); 
     } else if(error){
         res.render("poll",{errors,error,csrfToken: req.csrfToken()}); 
     } else {
+               let data = new poll({
+            title:  req.body.title,
+            options:choices1,
+            author: username
+  });
+   poll.createPoll(data, function(err, poll) {
+       if(err)console.log(err)
+
     res.redirect('/show/' + poll._id);
+   });
     }
-});
+
 });
 
 /* render one poll */
@@ -101,9 +104,8 @@ router.post("/show/:id",(req,res)=>{
         let New = new newChoice(choice);
         
         poll.update({_id: id, 'options.option': {$ne: New.option}}, 
-            {$push: {options: {'option': New.option, 'votes': New.votes}}},(err,doc)=>{
+            {$push: {options: {'option': New.option, 'votes': New.votes}}},(err)=>{
                 if(err)console.log(err);
-                else console.log(doc);
        });
        
         poll.update({_id: id, "options.option": New.option},
