@@ -11,6 +11,7 @@ const flash = require('connect-flash');
 const middleware = require('./middleware');
 const csrf = require('csurf');
 const mongoose = require("mongoose");
+const compression = require('compression');
 
 const app = express();
 require("dotenv").config();
@@ -36,6 +37,7 @@ module.exports.createUserSession = function(req, res, user) {
 };
 
 // view engine setup
+app.use(compression());
 app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout'}));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
