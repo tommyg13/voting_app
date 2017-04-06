@@ -1,3 +1,4 @@
+$(document).ready(function(){
 function add_fields() {
    var d = document.getElementById("content");
   
@@ -29,3 +30,4 @@ function NewOption() {
   
    d.innerHTML += "<label>Options:</label><br /><textarea name=options class=form-control> </textarea>";
 }
+});
