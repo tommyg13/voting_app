@@ -1,17 +1,34 @@
 <title>New poll</title>
 <link rel="stylesheet" href="/stylesheets/poll.css" type="text/css" />
-
+<script type="text/javascript" src="/javascript/javascript.js"></script>
 
 <div class="jumbotron container" align="center">
     <h1>Make a new poll</h1>
     <form method="post">
+        <div align="center">
+              {{# if error}}
+               <div class="alert alert-danger">
+                <p> {{error}}</p>
+                </div>
+            {{/if}} 
+            
+            {{#if errors}}
+                  {{#each errors}}
+        <div class="alert alert-danger"><p>{{msg}}</p> </div>
+      {{/each}}
+{{/if}}
+
         <input type="hidden", name="_csrf", value="{{csrfToken}}">  
         <label>Title:</label> <br>
         <input name="title" class="form-control">
         <label>Options:</label> <br>
         <textarea name="options" class="form-control"> </textarea>
-                <label>Options:</label> <br>
+        <label>Options:</label> <br>
         <textarea name="options" class="form-control"> </textarea>
+        <div id="new">
+            
+        </div>
         <button class="btn btn-danger">Create</button>
+        <button style="margin-left:2px; margin-top:5px"id="add"class="btn btn-info" type="button" onclick="NewOption();">add option</button>
     </form>
 </div>

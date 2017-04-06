@@ -6,12 +6,12 @@ const ObjectId = Schema.ObjectId;
 let Polls = new mongoose.Schema({
 id:           ObjectId,
   title:        String,
-  options:      {type:Array,index: true},
+  options:      Array,
   author:       String,
 });
 
 let Poll = module.exports = mongoose.model('polls', Polls);
 
-module.exports.createPoll = function(newPoll, callback) {
+module.exports.createPoll = (newPoll, callback)=> {
     newPoll.save(callback);
 };

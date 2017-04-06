@@ -23,9 +23,17 @@ a:hover {
 }
 
 .alert {
-    width:480px !important;
+    width:480px ;
 }
 
 .jumbotron a {
     font-size: 20px;
+
+}
+
+@media screen and (max-width: 430px) {
+ .alert-danger, .alert-success,.alert {
+    width: 260px;
+}
+
 }

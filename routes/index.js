@@ -4,7 +4,6 @@ const poll = require("../models/polls");
 
 /* Get home page */
 router.get("/",(req,res)=>{
-  
   poll.find()
           .then((doc)=>{
 				res.render("index",{title:doc});

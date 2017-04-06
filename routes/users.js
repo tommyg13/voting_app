@@ -11,6 +11,7 @@ const router = express.Router();
 
 require("dotenv").config();
 const pass=process.env.PASS;
+
 /* Get register page */
 router.get("/register",(req,res)=>{
    res.render("register",{csrfToken: req.csrfToken()}); 
@@ -21,22 +22,24 @@ router.post('/register', function(req, res) {
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(req.body.password, salt);
   let hash1 = bcrypt.hashSync(req.body.password2, salt);
+  let regex = /^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/
   let user = new models.User({
     username:  req.body.username,
     email:      req.body.email,
     password:   hash,
-    password2: hash1
+    password2:  hash1
   });
 	req.checkBody('email', 'Email is required').notEmpty();
 	req.checkBody('email', 'Email is not valid').isEmail();
 	req.checkBody('username', 'Username is required').notEmpty();
 	req.checkBody('password', 'Password is required').notEmpty();
-req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
+  req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
   user.save(function(err,user) {
         
       let errors = req.validationErrors();
       let error ="";
     if (err) {
+      
       if (err.code === 11000) {
         error = 'That email is already taken, please try another.';
       }
@@ -47,7 +50,12 @@ req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
     req.session.destroy();
     req.session.reset();
       res.render('register', { errors: errors, error:error,csrfToken: req.csrfToken() });
-    } 
+    } else if (!req.body.password.match(regex)){
+        error = 'Password must be at least 6 characters and contain 1 uppercase ';
+            req.session.destroy();
+    req.session.reset();
+      res.render('register', { errors: errors, error:error,csrfToken: req.csrfToken() });
+      }
     else {
       server.createUserSession(req, res, user);
     let success="You are successfully registered and loged in";
@@ -59,6 +67,7 @@ req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
 
 /* Get login page */
 router.get("/login",(req,res)=>{
+  
    res.render("login",{csrfToken: req.csrfToken()});
 });
 
@@ -69,14 +78,14 @@ router.get("/login",(req,res)=>{
 router.post("/login",(req,res)=>{
    models.User.findOne({email: req.body.email}, "username email password",(err,user)=>{
       if(!user){
-          res.render("login",{"error":"Unknown User",csrfToken: req.csrfToken()});
+          res.render("login",{"error":"User does not exist ",csrfToken: req.csrfToken()});
       }else {
       if (bcrypt.compareSync(req.body.password, user.password)) {
         server.createUserSession(req, res, user);
         res.redirect('/');
         
       }else {
-        res.render('login', { "error": "Incorrect email / password.",csrfToken: req.csrfToken()});
+        res.render('login', { "error": "Incorrect email or password.",csrfToken: req.csrfToken()});
       }
       }
    });
@@ -169,7 +178,6 @@ router.post('/reset/:token', function(req, res) {
             return res.redirect('back');
 }
   if(req.body.password !==req.body.confirm){
-    console.log("true");
      req.flash('error', 'Passwords do no match');
             return res.redirect('back');
   }

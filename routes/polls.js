@@ -4,6 +4,7 @@ const router = express.Router();
 
 /* Authenticate user */
 function requireLogin (req, res, next) {
+    
   if (req.session.user===undefined) {
     
      res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
@@ -23,27 +24,42 @@ router.get("/new_poll",requireLogin,(req,res)=>{
 router.post("/new_poll",(req,res)=>{
 let username = req.user.username;
 let option=req.body.options;
-console.log(option)
+
       let choices = function(option) {
         this.option = option;
         this.votes = 0;
       },
-      choices1 = [];
+        choices1 = [];
       option.forEach(function(item) {
-    var x = new choices(item);
-    choices1.push(x);
+      let x = new choices(item);
+        choices1.push(x);
   });
 
-let data = new poll({
-    title:  req.body.title,
-    options:choices1,
-    author: username
+       let data = new poll({
+            title:  req.body.title,
+            options:choices1,
+            author: username
   });
+  
+	req.checkBody('title', 'Your poll needs a title').notEmpty();
 
  poll.createPoll(data, function(err, poll) {
-    if (err) throw err;
-
+     let errors = req.validationErrors();
+     let error = "";
+     	option.forEach(opt=>{
+        if(opt.length<=1){
+            error="Options cannot be empty";
+        }	    
+	});
+     
+     if(err) console.log(err);
+     if(errors){
+        res.render("poll",{errors,error,csrfToken: req.csrfToken()}); 
+    } else if(error){
+        res.render("poll",{errors,error,csrfToken: req.csrfToken()}); 
+    } else {
     res.redirect('/show/' + poll._id);
+    }
 });
 });
 
@@ -84,24 +100,19 @@ router.post("/show/:id",(req,res)=>{
         };
         let New = new newChoice(choice);
         
-    poll.update({_id: id}, {$addToSet: {"options": New, $exists: false}}, function(err, doc){
-          if (err) {
-            console.log(err);
-          } 
-          else {
-              console.log(doc)
-          }
-});
-    poll.update({_id: id, "options.option": choice},
-              {$inc: {"options.$.votes": 1}},
-              function(err, vote) {
-                if (err) {
-                  console.log( err);
-                } else {
-                  console.log( vote);
-                }
-              });
-
+        poll.update({_id: id, 'options.option': {$ne: New.option}}, 
+            {$push: {options: {'option': New.option, 'votes': New.votes}}},(err,doc)=>{
+                if(err)console.log(err);
+                else console.log(doc);
+       });
+       
+        poll.update({_id: id, "options.option": New.option},
+                  {$inc: {"options.$.votes": 1}},
+                  (err, vote)=> {
+                    if (err) {
+                      console.log( err);
+                    } 
+        });
 
             res.redirect("/show/"+id);
 });

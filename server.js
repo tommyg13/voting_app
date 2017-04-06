@@ -17,7 +17,7 @@ require("dotenv").config();
 const url=process.env.MONGOLAB_URI;
 
 // connect to db
-mongoose.connect(url,(err)=>{
+mongoose.connect(url ||"mongodb://localhost:27017",(err)=>{
     if(err) console.log("not connect to db " +err);
     else console.log("connected to db");
 });
@@ -25,9 +25,9 @@ mongoose.connect(url,(err)=>{
 /* Create session */
 module.exports.createUserSession = function(req, res, user) {
   var cleanUser = {
-    username:  user.username,
+    username:   user.username,
     email:      user.email,
-    password: user.password
+    password:   user.password
   };
 
   req.session.user = cleanUser;
@@ -50,8 +50,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({
     cookieName: 'session',
     secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
+    resave: true,
+    saveUninitialized: true,
     httpOnly:true,
     duration: 30 * 60 * 1000,
     activeDuration: 5 * 60 * 1000,

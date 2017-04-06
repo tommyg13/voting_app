@@ -1,6 +1,6 @@
 body {
     color:black;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 select {
