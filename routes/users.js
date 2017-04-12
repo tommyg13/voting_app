@@ -22,7 +22,7 @@ router.post('/register', function(req, res) {
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(req.body.password, salt);
   let hash1 = bcrypt.hashSync(req.body.password2, salt);
-  let regex = /^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/
+  let regex = /^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/;
   let user = new models.User({
     username:  req.body.username,
     email:      req.body.email,
@@ -33,8 +33,17 @@ router.post('/register', function(req, res) {
 	req.checkBody('email', 'Email is not valid').isEmail();
 	req.checkBody('username', 'Username is required').notEmpty();
 	req.checkBody('password', 'Password is required').notEmpty();
+	req.checkBody('password', 'Password must be at least 6 characters').isLength({min:6});
   req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
-  user.save(function(err,user) {
+      var errors = req.validationErrors();
+if(errors){
+  
+    req.session.destroy();
+    req.session.reset();
+      res.render('register', { errors: errors,csrfToken: req.csrfToken() });
+    }     
+    else {
+       user.save(function(err,user) {
         
       let errors = req.validationErrors();
       let error ="";
@@ -45,23 +54,14 @@ router.post('/register', function(req, res) {
       }
         
       res.render('register',{errors:errors, error:error,csrfToken: req.csrfToken()});
-    }else if(req.body.password !== req.body.password2){
-        error="Passwords do not match";
-    req.session.destroy();
-    req.session.reset();
-      res.render('register', { errors: errors, error:error,csrfToken: req.csrfToken() });
-    } else if (!req.body.password.match(regex)){
-        error = 'Password must be at least 6 characters and contain 1 uppercase ';
-            req.session.destroy();
-    req.session.reset();
-      res.render('register', { errors: errors, error:error,csrfToken: req.csrfToken() });
-      }
-    else {
-      server.createUserSession(req, res, user);
-    let success="You are successfully registered and loged in";
-    res.render('register',{ success,csrfToken: req.csrfToken() });
     }
-  });
+    else{
+           req.flash('success_msg', 'You are registered and login');
+       res.redirect('/register');
+    }
+       });
+      server.createUserSession(req, res, user);
+    }
 });
 
 
