@@ -56,11 +56,12 @@ if(errors){
       res.render('register',{errors:errors, error:error,csrfToken: req.csrfToken()});
     }
     else{
-           req.flash('success_msg', 'You are registered and login');
-       res.redirect('/register');
+           req.flash('success_msg', 'You are successfully registered and can now login ');
+       res.redirect('/login');
+       server.createUserSession(req, res, user);
     }
        });
-      server.createUserSession(req, res, user);
+      
     }
 });
 
