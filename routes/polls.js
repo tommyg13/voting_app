@@ -5,7 +5,7 @@ const router = express.Router();
 /* Authenticate user */
 function requireLogin (req, res, next) {
     
-  if (req.session.user===undefined) {
+  if (req.session.user===undefined  && req.user===undefined) {
     
      res.set('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
      req.session.destroy();
@@ -25,6 +25,7 @@ router.post("/new_poll",(req,res)=>{
 let username = req.user.username;
 let option=req.body.options;
 let title= req.body.title;
+
       let choices = function(option) {
         this.option = option;
         this.votes = 0;
@@ -68,11 +69,13 @@ let title= req.body.title;
 
 /* render one poll */
 router.get("/show/:id",(req,res)=>{
+    
    let id= req.params.id;
    let auth= false;
    let option=[];
    let votes=[];
   poll.findById(id,(err,doc)=>{
+      console.log(doc.author)
       if(err) console.log(err);
       else {
           if(req.user === undefined ){
