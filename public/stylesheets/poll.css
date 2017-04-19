@@ -10,10 +10,6 @@ button {
     margin:5px;
 }
 
-textarea {
-    padding: 0 !important;
-}
-
 @media screen and (max-width: 430px) {
     .alert p{
     font-size:14px;

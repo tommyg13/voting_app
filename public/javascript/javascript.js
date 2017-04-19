@@ -25,8 +25,7 @@ function submitOption() {
 }
 
 function NewOption() {
- 
    var d = document.getElementById("new");
   
-   d.innerHTML += "<label>Options:</label><br /><textarea name=options class=form-control> </textarea>";
+   d.innerHTML += "<label>Options:</label><br /><input name=options class=form-control> </input>";
 }

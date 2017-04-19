@@ -22,7 +22,6 @@ router.post('/register', function(req, res) {
   let salt = bcrypt.genSaltSync(10);
   let hash = bcrypt.hashSync(req.body.password, salt);
   let hash1 = bcrypt.hashSync(req.body.password2, salt);
-  let regex = /^(?=.*?[A-Z])(?=.*?[0-9]).{8,}$/;
   let user = new models.User({
     username:  req.body.username,
     email:      req.body.email,
@@ -35,35 +34,40 @@ router.post('/register', function(req, res) {
 	req.checkBody('password', 'Password is required').notEmpty();
 	req.checkBody('password', 'Password must be at least 6 characters').isLength({min:6});
   req.checkBody('password2', 'Passwords do not match').equals(req.body.password);
+  // handle the errors
       var errors = req.validationErrors();
 if(errors){
   
     req.session.destroy();
     req.session.reset();
       res.render('register', { errors: errors,csrfToken: req.csrfToken() });
-    }     
+    }
+    
+  // if not errors save user on db  
     else {
        user.save(function(err,user) {
-        
       let errors = req.validationErrors();
       let error ="";
+    // handle duplicates on username and email
     if (err) {
-      
-      if (err.code === 11000) {
-        error = 'That email is already taken, please try another.';
+      let EmailErr=err.message.slice(0,68);
+      if(EmailErr=="E11000 duplicate key error index: trade_book.users.$email_1 dup key:"){
+         error = 'That Email is already taken, please try another.';
       }
-        
-      res.render('register',{errors:errors, error:error,csrfToken: req.csrfToken()});
+      res.render('register',{title:"Register",errors:errors, error:error,csrfToken: req.csrfToken()});
     }
+    
+    // redirect user on login pag
     else{
-           req.flash('success_msg', 'You are successfully registered and can now login ');
+      req.flash('success_msg', 'You are successfully registered and can now logged in');
        res.redirect('/login');
-       server.createUserSession(req, res, user);
+        server.createUserSession(req, res, user);
     }
        });
-      
+     
     }
 });
+
 
 
 /* Get login page */
@@ -182,6 +186,12 @@ router.post('/reset/:token', function(req, res) {
      req.flash('error', 'Passwords do no match');
             return res.redirect('back');
   }
+  
+      if(req.body.password.length <6 ){
+     req.flash('error', 'Password must be at least 6 characters');
+            return res.redirect('back');
+  }
+    
     
     let salt = bcrypt.genSaltSync(10);
       let hash = bcrypt.hashSync(req.body.password, salt);

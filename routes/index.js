@@ -28,7 +28,7 @@ function requireLogin (req, res, next) {
 
 /*Render the profile page. */
 router.get('/profile', requireLogin, function(req, res) {
-let query = {author: req.user.username};
+let query = {author: req.user.email};
 
     poll.find(query)
           .then((doc)=>{

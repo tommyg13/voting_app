@@ -22,10 +22,10 @@ router.get("/new_poll",requireLogin,(req,res)=>{
 
 /* handle new poll */
 router.post("/new_poll",(req,res)=>{
-let username = req.user.username;
+let username = req.user.email;
 let option=req.body.options;
 let title= req.body.title;
-
+     option = [ ...new Set(option) ];
       let choices = function(option) {
         this.option = option;
         this.votes = 0;
@@ -33,27 +33,28 @@ let title= req.body.title;
         choices1 = [];
       option.forEach(function(item) {
       let x = new choices(item);
-        choices1.push(x);
+       choices1.push(x);
   });
-
-  
 	req.checkBody('title', 'Your poll needs a title').notEmpty();
-
-
      let errors = req.validationErrors();
      let error = "";
      	option.forEach(opt=>{
-        if(opt.length<=1){
+        if(opt.length<1){
             error="Options cannot be empty";
-        }	    
+        }
 	});
-     
+    
+option.reduce( (prev, curr) => {
+    if(prev===curr){
+       error="Options must be different";
+    }
+} );
      if(errors){
         res.render("poll",{errors,error,option,title,csrfToken: req.csrfToken()}); 
     } else if(error){
         res.render("poll",{errors,error,csrfToken: req.csrfToken()}); 
     } else {
-               let data = new poll({
+        let data = new poll({
             title:  req.body.title,
             options:choices1,
             author: username
@@ -74,17 +75,20 @@ router.get("/show/:id",(req,res)=>{
    let auth= false;
    let option=[];
    let votes=[];
+
   poll.findById(id,(err,doc)=>{
-      console.log(doc.author)
-      if(err) console.log(err);
+      
+      if(doc===null){
+          req.flash("error","Poll not found");
+          res.redirect("/");
+      }
       else {
           if(req.user === undefined ){
             auth = false;
           }
-          else if(doc.author == req.user.username) {
+          else if(doc.author == req.user.email) {
               auth= true;
           }
-
         for(let i=0; i<doc.options.length; i++){
             option.push(doc.options[i].option);
             votes.push(doc.options[i].votes);
@@ -100,17 +104,15 @@ router.get("/show/:id",(req,res)=>{
 router.post("/show/:id",(req,res)=>{
         let id=req.params.id;
         let choice= req.body.option;
-        let newChoice = function(option) {
+        let options = function(option) {
             this.option = choice;
             this.votes = 0;
         };
-        let New = new newChoice(choice);
-        
+        let New = new options(choice);
         poll.update({_id: id, 'options.option': {$ne: New.option}}, 
             {$push: {options: {'option': New.option, 'votes': New.votes}}},(err)=>{
                 if(err)console.log(err);
        });
-       
         poll.update({_id: id, "options.option": New.option},
                   {$inc: {"options.$.votes": 1}},
                   (err, vote)=> {
