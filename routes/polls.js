@@ -70,7 +70,7 @@ option.reduce( (prev, curr) => {
 
 /* render one poll */
 router.get("/show/:id",(req,res)=>{
-    
+    console.log(req.ip , req.connection.remoteAddress)
    let id= req.params.id;
    let auth= false;
    let option=[];
