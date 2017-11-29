@@ -31,7 +31,7 @@ if(errors.length === 0) {
             }
         });
 } else {
-    errors=[{msg:"Options are required"}];
+    errors=[{msg:"All fields are required"}];
     renderErrors(errors);
 }
        
