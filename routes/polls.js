@@ -27,7 +27,7 @@ router.post("/new_poll",(req,res)=>{
     // remove duplicates
     let newOptions= new Set(options);
     let errors=[{msg:""}];
-
+console.log(options)
     if(!title || !options) {
         errors[0].msg="All fields are required";
     }

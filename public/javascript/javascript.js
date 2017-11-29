@@ -8,14 +8,14 @@ $(document).ready(function(){
    $("#newPoll").on("submit",function(e){
       e.preventDefault();
       $(".errorCont").html("");
-    let errors=[];
-    if($(".title").val().trim() === "") {
-        errors.push({msg: "Title is required"});
+    let errors=[]
+   $(".title, .option").each(function(){    
+    if($(this).val().trim() === "") {
+        errors.push("Options are required");
     }
-    if($(".option").val().trim() === "") {
-        errors.push({msg: "Options are required"});
-    }
-
+   });
+   
+if(errors.length === 0) {
         const formData=$(this).serialize();
       $.ajax({
          type: "POST",
@@ -30,7 +30,10 @@ $(document).ready(function(){
             renderErrors(err.responseJSON.msg);
             }
         });
-   
+} else {
+    errors=[{msg:"Options are required"}];
+    renderErrors(errors);
+}
        
    });
    
@@ -43,22 +46,17 @@ $(document).ready(function(){
             $("#newPoll").prepend(resultcontent);
    }
 });
+
 function add_fields() {
   var d = document.getElementById("content");
   
-  d.innerHTML += "<br /><span><input id=input type='text'style='width:80px;'value='' /></span>";
+  d.innerHTML += "<br /><span><input id=input type='text'style='width:80px;'value=''  onkeydown='if (event.keyCode == 13) return false' /></span>";
   $("#add, .btn-success, .btn-danger").hide();
     $("#confirm").show();
      $("#confirm").css('margin-left', '0px');
 }
- $(window).keydown(function(event){
-    if(event.keyCode == 13) {
-      event.preventDefault();
-      return false;
-    }
-  });
   
-function submitOption() {
+function submitOption(event) {
      let text=document.getElementById("input").value;
      var x = document.getElementById("mySelect");
     var option = document.createElement("option");
