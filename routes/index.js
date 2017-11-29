@@ -5,10 +5,21 @@ const poll = require("../models/polls");
 /* Get home page */
 router.get("/",(req,res)=>{
   poll.find()
-          .then((doc)=>{
-				res.render("index",{title:doc});
+      .then((doc)=>{
+          res.render("index",{title:doc});
+      });
 });
+
+/*Render the profile page. */
+router.get('/profile', requireLogin, function(req, res) {
+let query = {author: req.user.email};
+
+    poll.find(query)
+        .then((doc)=>{
+            res.render('Profile',{title:doc});
+        });
 });
+
 
 /**
  Ensure a user is logged in before allowing them to continue their request.
@@ -25,17 +36,5 @@ function requireLogin (req, res, next) {
     next();
   }
 }
-
-/*Render the profile page. */
-router.get('/profile', requireLogin, function(req, res) {
-let query = {author: req.user.email};
-
-    poll.find(query)
-          .then((doc)=>{
-				res.render('Profile',{title:doc});
-});
-});
-
-
 
 module.exports = router;

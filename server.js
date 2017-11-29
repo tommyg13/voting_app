@@ -12,13 +12,15 @@ const middleware = require('./middleware');
 const csrf = require('csurf');
 const mongoose = require("mongoose");
 const compression = require('compression');
+const Promise = require("bluebird");
 
 const app = express();
 require("dotenv").config();
 const url=process.env.MONGOLAB_URI;
 
+mongoose.Promise = Promise;
 // connect to db
-mongoose.connect(url ||"mongodb://localhost:27017",(err)=>{
+mongoose.connect(url ||"mongodb://localhost:27017",{useMongoClient:true},(err)=>{
     if(err) console.log("not connect to db " +err);
     else console.log("connected to db");
 });
@@ -55,8 +57,8 @@ app.use(session({
     resave: true,
     saveUninitialized: true,
     httpOnly:true,
-    duration: 30 * 60 * 1000,
-    activeDuration: 5 * 60 * 1000,
+    duration: 30 * 60 * 10000,
+    activeDuration: 5 * 60 * 10000,
   }));
   
 /* config csurf */

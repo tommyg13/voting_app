@@ -4,14 +4,15 @@ const ObjectId = Schema.ObjectId;
 
 /* Create Poll */
 let Polls = new mongoose.Schema({
-id:           ObjectId,
+  id:           ObjectId,
   title:        String,
   options:      Array,
   author:       String,
 });
 
-let Poll = module.exports = mongoose.model('polls', Polls);
-
-module.exports.createPoll = (newPoll, callback)=> {
-    newPoll.save(callback);
+Polls.methods.createPoll = function createPoll(userChoice) {
+    this.title = userChoice.title;
+    this.author = userChoice.author;
+    this.options = userChoice.choices[0].choice;
 };
+module.exports = mongoose.model('polls', Polls);

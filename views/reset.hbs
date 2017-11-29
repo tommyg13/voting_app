@@ -1,11 +1,7 @@
 <title>Password reset</title>
 <h1 align="center">Reset Password</h1>
  <div class="container" align="center">
-          {{# if error}}
-   <div class="alert alert-danger">
-    <p> {{error}}</p>
-    </div>
-{{/if}} 
+{{>messages}}
   {{# if success}}
   <div class="alert alert-success">
     <p> {{success}}</p>
